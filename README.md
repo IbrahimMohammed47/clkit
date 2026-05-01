@@ -9,6 +9,8 @@
  ╚═════╝╚══════╝╚═╝  ╚═╝╚═╝   ╚═╝  
 ```
 
+[![npm version](https://img.shields.io/npm/v/@ibrahim-mohammed-47/clkit)](https://www.npmjs.com/package/@ibrahim-mohammed-47/clkit)
+
 A CLI wizard that scaffolds Claude Code configuration into a project so the whole team shares the same setup.
 
 > **Not affiliated with Anthropic.** This is an independent community tool. Claude and Claude Code are products of Anthropic.
@@ -18,6 +20,8 @@ A CLI wizard that scaffolds Claude Code configuration into a project so the whol
 Claude Code reads project-level configuration from a `.claude/` directory at the root of your repository. When that directory is committed to source control, every developer who clones the repo gets the same Claude behavior automatically — the same skills, the same hooks, the same plugin state, the same MCP server configuration.
 
 The problem is that building this configuration manually is tedious and error-prone. `clkit` is a menu-driven wizard that does it for you: it reads your existing machine-level Claude setup, lets you select what belongs at the project level, and writes everything to `.claude/` in a format Claude Code understands.
+
+The bundled presets — hook groups, predefined MCP servers, and Misc enhancements — reflect my own opinions about tools and setups I've found genuinely useful. They are opinionated by design.
 
 ## Installation
 
@@ -94,7 +98,7 @@ Both tabs confirm on a single `Enter` press. Changes to installed servers and pr
 
 Claude Code hooks are shell commands that run automatically at lifecycle events: after a file edit, after Claude stops, when Claude needs input, and others. They are defined in `.claude/settings.json` under `hooks`.
 
-The Hook Groups wizard presents a curated set of predefined hook groups bundled with `clkit`. These are the only feature in the tool that is prescriptive: the available groups come from the tool itself, not from your machine. Current built-in groups:
+The Hook Groups wizard presents a curated set of predefined hook groups bundled with `clkit`. These groups come from the tool itself, not from your machine — they reflect my own opinions about hooks worth having on most projects. Current built-in groups:
 
 | Group                   | What it does                                                                               |
 | ----------------------- | ------------------------------------------------------------------------------------------ |
