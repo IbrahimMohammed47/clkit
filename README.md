@@ -22,13 +22,13 @@ The problem is that building this configuration manually is tedious and error-pr
 ## Installation
 
 ```bash
-npm install -g clkit
+npm install -g @ibrahim-mohammed-47/clkit
 ```
 
 Or run without installing:
 
 ```bash
-npx clkit
+npx @ibrahim-mohammed-47/clkit
 ```
 
 ## Usage
