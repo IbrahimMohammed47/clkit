@@ -1,0 +1,31 @@
+{
+  "name": "clkit",
+  "version": "1.0.0",
+  "description": "A CLI wizard to help teams share the same claude code powers by scaffolding project scope configuration",
+  "type": "module",
+  "bin": {
+    "clkit": "./bin/clkit.js"
+  },
+  "scripts": {
+    "start": "node bin/clkit.js",
+    "dev": "node --watch bin/clkit.js"
+  },
+  "keywords": [
+    "claude",
+    "kit",
+    "scaffold",
+    "cli",
+    "agents",
+    "skills"
+  ],
+  "author": "Ibrahim Mohammed",
+  "license": "MIT",
+  "dependencies": {
+    "@inquirer/prompts": "^8.4.2",
+    "figlet": "^1.11.0",
+    "picocolors": "^1.1.1"
+  },
+  "devDependencies": {
+    "shadcn": "^4.5.0"
+  }
+}

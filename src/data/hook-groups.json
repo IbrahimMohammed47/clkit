@@ -1,0 +1,151 @@
+[
+  {
+    "name": "tsc-on-edit",
+    "description": "Run tsc --noEmit after editing TypeScript files",
+    "preconditions": [
+      "npx"
+    ],
+    "hookGroup": {
+      "PostToolUse": [
+        {
+          "matcher": "Edit",
+          "hooks": [
+            {
+              "type": "command",
+              "if": "Edit(*.ts*)",
+              "command": "bash -c 'out=$(npx tsc --noEmit 2>&1); code=$?; [ $code -ne 0 ] && { echo \"$out\" >&2; exit 2; }; exit 0'"
+            }
+          ]
+        },
+        {
+          "matcher": "Write",
+          "hooks": [
+            {
+              "type": "command",
+              "if": "Write(*.ts*)",
+              "command": "bash -c 'out=$(npx tsc --noEmit 2>&1); code=$?; [ $code -ne 0 ] && { echo \"$out\" >&2; exit 2; }; exit 0'"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "name": "npm-lint-on-edit",
+    "description": "Run npm run lint after editing files",
+    "preconditions": [
+      "npm"
+    ],
+    "hookGroup": {
+      "PostToolUse": [
+        {
+          "matcher": "Edit",
+          "hooks": [
+            {
+              "type": "command",
+              "command": "bash -c 'out=$(npm run lint 2>&1); code=$?; [ $code -ne 0 ] && { echo \"$out\" >&2; exit 2; }; exit 0'"
+            }
+          ]
+        },
+        {
+          "matcher": "Write",
+          "hooks": [
+            {
+              "type": "command",
+              "command": "bash -c 'out=$(npm run lint 2>&1); code=$?; [ $code -ne 0 ] && { echo \"$out\" >&2; exit 2; }; exit 0'"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "name": "eslint-on-edit",
+    "description": "Run ESLint --fix after editing JS/TS files",
+    "preconditions": [
+      "npx"
+    ],
+    "hookGroup": {
+      "PostToolUse": [
+        {
+          "matcher": "Edit",
+          "hooks": [
+            {
+              "type": "command",
+              "if": "Edit(*.[jt]s*)",
+              "command": "bash -c 'file=\"$CLAUDE_TOOL_RESULT_FILE_PATH\"; out=$(npx eslint --fix \"$file\" 2>&1); code=$?; [ $code -ne 0 ] && { echo \"$out\" >&2; exit 2; }; exit 0'"
+            }
+          ]
+        },
+        {
+          "matcher": "Write",
+          "hooks": [
+            {
+              "type": "command",
+              "if": "Write(*.[jt]s*)",
+              "command": "bash -c 'file=\"$CLAUDE_TOOL_RESULT_FILE_PATH\"; out=$(npx eslint --fix \"$file\" 2>&1); code=$?; [ $code -ne 0 ] && { echo \"$out\" >&2; exit 2; }; exit 0'"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "name": "prettier-on-edit",
+    "description": "Run Prettier after editing JS/TS/CSS/JSON files",
+    "preconditions": [
+      "npx"
+    ],
+    "hookGroup": {
+      "PostToolUse": [
+        {
+          "matcher": "Edit",
+          "hooks": [
+            {
+              "type": "command",
+              "if": "Edit(*.[jt]s*|*.css|*.json|*.md)",
+              "command": "bash -c 'file=\"$CLAUDE_TOOL_RESULT_FILE_PATH\"; out=$(npx prettier --write \"$file\" 2>&1); code=$?; [ $code -ne 0 ] && { echo \"$out\" >&2; exit 2; }; exit 0'"
+            }
+          ]
+        },
+        {
+          "matcher": "Write",
+          "hooks": [
+            {
+              "type": "command",
+              "if": "Write(*.[jt]s*|*.css|*.json|*.md)",
+              "command": "bash -c 'file=\"$CLAUDE_TOOL_RESULT_FILE_PATH\"; out=$(npx prettier --write \"$file\" 2>&1); code=$?; [ $code -ne 0 ] && { echo \"$out\" >&2; exit 2; }; exit 0'"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "name": "desktop-notifications",
+    "description": "Send desktop notifications when Claude Code finishes working or needs user input. Works on macOS and Linux systems.",
+    "preconditions": [],
+    "hookGroup": {
+      "Stop": [
+        {
+          "hooks": [
+            {
+              "type": "command",
+              "command": "if command -v osascript >/dev/null 2>&1; then osascript -e 'display notification \"Claude has finished working\" with title \"Claude Code\"'; elif command -v notify-send >/dev/null 2>&1; then notify-send 'Claude Code' \"Claude has finished working\"; fi"
+            }
+          ]
+        }
+      ],
+      "Notification": [
+        {
+          "hooks": [
+            {
+              "type": "command",
+              "command": "if command -v osascript >/dev/null 2>&1; then osascript -e 'display notification \"Claude needs your input\" with title \"Claude Code\" sound name \"Ping\"'; elif command -v notify-send >/dev/null 2>&1; then notify-send -u critical 'Claude Code' \"Claude needs your input\"; fi"
+            }
+          ]
+        }
+      ]
+    }
+  }
+]
