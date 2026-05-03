@@ -20,7 +20,9 @@ function renderBanner() {
   console.log("");
   const art = figlet.textSync("clkit", { font: "ANSI Shadow" });
   console.log(pc.bold(pc.cyan(art)));
-  console.log(pc.dim(`  Claude/Agent project wizard  `) + pc.white(`v${VERSION}`));
+  console.log(
+    pc.dim(`  Claude/Agent project wizard  `) + pc.white(`v${VERSION}`),
+  );
   console.log("");
   console.log(pc.dim(`  Working directory: ${pc.underline(process.cwd())}`));
   console.log("");
@@ -76,10 +78,6 @@ export async function main() {
       message: "What would you like to configure?",
       choices: [
         {
-          name: `${pc.green("✦")}  Skills        ${pc.dim("Copy global skills into this project")}`,
-          value: "skills",
-        },
-        {
           name: `${pc.magenta("✦")}  Plugins       ${pc.dim("Enable/disable Claude plugins for this project")}`,
           value: "plugins",
         },
@@ -94,6 +92,11 @@ export async function main() {
         {
           name: `${pc.white("✦")}  Misc          ${pc.dim("Miscellaneous project enhancements")}`,
           value: "misc",
+        },
+        {
+          name: `${pc.green("✦")}  Skills        ${pc.dim("Copy global skills into this project")}`,
+          value: "skills",
+          disabled: "(coming soon)",
         },
         {
           name: `${pc.dim("○")}  Agents        ${pc.dim("(coming soon)")}`,

@@ -7,6 +7,7 @@ import {
   removeSkillFromProject,
   getLocalSkillsDir,
 } from '../utils/fs.js';
+import { syncSkillPermissions } from '../utils/settings.js';
 
 /**
  * Renders a styled header banner for the skills wizard.
@@ -127,8 +128,23 @@ export async function skillsWizard() {
     removeSkillFromProject(name);
   }
 
+  // Sync deny rules for unselected skills
+  const allSkillNames = globalSkills.map((s) => s.name);
+  const deniedSkills = syncSkillPermissions(selected, allSkillNames);
+
   renderSummary(
     toAdd.map((s) => s.name),
     toRemove
   );
+
+  // Warn about denied skills
+  if (deniedSkills.length > 0) {
+    console.log(
+      pc.yellow(
+        `  ⚠  Denied ${deniedSkills.length} skill(s) outside project scope:\n` +
+          deniedSkills.map((s) => `    • ${s}`).join('\n')
+      )
+    );
+    console.log('');
+  }
 }

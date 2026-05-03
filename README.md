@@ -10,6 +10,7 @@
 ```
 
 [![npm version](https://img.shields.io/npm/v/@ibrahim-mohammed-47/clkit)](https://www.npmjs.com/package/@ibrahim-mohammed-47/clkit)
+[![Alpha](https://img.shields.io/badge/status-alpha-orange)](#)
 
 A CLI wizard that scaffolds Claude Code configuration into a project so the whole team shares the same setup.
 
@@ -55,18 +56,20 @@ Commit `.claude/` to your repository when done.
 
 ### Skills
 
+> **Coming soon.** Skills wizard is currently under development and disabled in this alpha release.
+
 Skills are reusable instruction sets that extend what Claude Code knows how to do. Claude Code loads skills from `.claude/skills/<name>/` in the project directory.
 
-The Skills wizard scans your machine for globally installed skills across all supported agent tool locations:
+The Skills wizard (coming soon) will scan your machine for globally installed skills across all supported agent tool locations:
 
 - `~/.claude/skills/`
 - `~/.agents/skills/`
 - `~/.gemini/skills/`
 - `~/.cursor/skills/`
 
-It shows you every skill already installed on your machine and lets you choose which ones belong in this project. Selecting a skill copies its folder into `.claude/skills/`. Deselecting one removes it.
+It will show you every skill already installed on your machine and let you choose which ones belong in this project. Selecting a skill copies its folder into `.claude/skills/`. Deselecting one removes it.
 
-> The wizard does not suggest, recommend, or bundle any skills of its own. It only surfaces what you have already installed. Once a skill folder is committed to the repository, teammates who pull the repo get that skill applied automatically by Claude Code — even if they have never installed it globally themselves.
+> The wizard will not suggest, recommend, or bundle any skills of its own. It will only surface what you have already installed. Once a skill folder is committed to the repository, teammates who pull the repo will get that skill applied automatically by Claude Code — even if they have never installed it globally themselves.
 
 ### Plugins
 
