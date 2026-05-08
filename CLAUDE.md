@@ -26,22 +26,25 @@ src/data/                ← static data files (hook group definitions)
 
 **First-time setup (`runSetup` in `src/index.js`):** Runs once per project. Initializes `.claude/` structure, adds deny rules for `.env`, and prompts for project type (coding vs agentic). Sets `ENABLE_CLAUDEAI_MCP_SERVERS` env var in `settings.json`; skips on subsequent runs if key already present.
 
-**Feature flow pattern:** each `src/features/*.js` exports a single `<name>Wizard()` async function. The wizard renders a header, calls util functions to read current state, prompts the user via `@inquirer/prompts`, diffs old vs. new selection, and applies changes. All prompts catch `ExitPromptError` (Ctrl-C) and return gracefully. The `misc` wizard is an exception: it presents one-shot enhancements via `checkbox` (no prior state to diff) and applies each selected option immediately.
+**Feature flow pattern:** each `src/features/*.js` exports a single `<name>Wizard()` async function. The wizard renders a header, calls util functions to read current state, prompts the user via `@inquirer/prompts` (or `@inquirer/core` for custom prompts), diffs old vs. new selection, and applies changes. All prompts catch `ExitPromptError` (Ctrl-C) and return gracefully. The `misc` wizard is an exception: it presents one-shot enhancements via `checkbox` (no prior state to diff) and applies each selected option immediately.
+
+**Tabbed prompts (`mcp.js`, `skills.js`):** built with `createPrompt` from `@inquirer/core`. Use `useState`/`useKeypress` directly. Important: `@inquirer/core`'s `useState` setter takes a plain value only — functional updaters (arrow functions) are not supported and will set state to the function itself. Always pass computed values using closure variables (e.g. `setActiveTab((activeTab + 1) % 2)`, not `setActiveTab(t => t + 1)`).
 
 **Utils layer:**
 
 | File            | Responsibility                                                                                                                                                                                               |
 | --------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | `fs.js`         | Scans `~/.claude/skills`, `~/.agents/skills`, `~/.gemini/skills`, `~/.cursor/skills` for global skills; copies/removes skill folders to `./.claude/skills/`                                                  |
-| `settings.js`   | Reads/writes `./.claude/settings.json` (`enabledPlugins`, `hooks`, `env`, `permissions.deny`, `disabledMcpjsonServers`); merges without clobbering keys owned by other users                                 |
+| `settings.js`   | Reads/writes `./.claude/settings.json` (`enabledPlugins`, `hooks`, `env`, `permissions.deny`, `disabledMcpjsonServers`) and `./.claude/settings.local.json` (`skillOverrides`); merges without clobbering keys owned by other users |
 | `claude-cli.js` | Shells out to the `claude` CLI (`spawnSync`) for plugin listing/enable/disable and MCP listing/get; parses plain-text output                                                                                 |
 | `mcp.js`        | Reads/writes `./.claude/.mcp.json` (`{ mcpServers: {...} }`); builds server config objects from wizard answers; extracts `${VAR}` references                                                                 |
 | `hooks.js`      | Reads `src/data/hook-groups.json`; checks which predefined groups are fully applied; writes/removes hook entries in `settings.json` while preserving user-added hooks; checks precondition tools via `which` |
 
 **State written to the target project's `.claude/` directory:**
 
-- `.claude/skills/<name>/` — copied skill folders (Skills wizard)
+- `.claude/skills/<name>/` — real-copy skill folders (Skills wizard, Copy to Project tab); symlinks dereferenced via `fs.realpathSync` + `fs.cpSync({ dereference: true })`
 - `.claude/settings.json` — `enabledPlugins` map (Plugins wizard); `hooks` block (Hook Groups wizard); `env` and `permissions.deny` (first-time setup); `disabledMcpjsonServers` (MCP wizard)
+- `.claude/settings.local.json` — `skillOverrides` map (Skills wizard, Enable/Disable tab); personal per-developer file, should not be committed
 - `.claude/.mcp.json` — MCP server configs (MCP wizard)
 
 **State written outside `.claude/` (Misc wizard):**

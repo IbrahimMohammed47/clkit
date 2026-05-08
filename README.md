@@ -56,20 +56,15 @@ Commit `.claude/` to your repository when done.
 
 ### Skills
 
-> **Coming soon.** Skills wizard is currently under development and disabled in this alpha release.
+Skills are reusable instruction sets that extend what Claude Code knows how to do.
 
-Skills are reusable instruction sets that extend what Claude Code knows how to do. Claude Code loads skills from `.claude/skills/<name>/` in the project directory.
+The Skills wizard presents two tabs, navigable with `◄` / `►`:
 
-The Skills wizard (coming soon) will scan your machine for globally installed skills across all supported agent tool locations:
+**Enable / Disable tab** — lists every skill Claude currently has access to: skills from your user-level `~/.claude/skills/` and skills already copied into the project's `.claude/skills/`. Toggle any on or off. Disabled skills are written to `.claude/settings.local.json` under `skillOverrides` as `"off"`. This file is personal and should not be committed — it lets each developer control their own skill visibility without affecting teammates.
 
-- `~/.claude/skills/`
-- `~/.agents/skills/`
-- `~/.gemini/skills/`
-- `~/.cursor/skills/`
+**Copy to Project tab** — lists user-level skills that are not yet in the project. Selecting one copies the skill folder into `.claude/skills/` as a real directory (symlinks are dereferenced). Commit `.claude/skills/` so teammates get the skill automatically, even if they have never installed it globally themselves.
 
-It will show you every skill already installed on your machine and let you choose which ones belong in this project. Selecting a skill copies its folder into `.claude/skills/`. Deselecting one removes it.
-
-> The wizard will not suggest, recommend, or bundle any skills of its own. It will only surface what you have already installed. Once a skill folder is committed to the repository, teammates who pull the repo will get that skill applied automatically by Claude Code — even if they have never installed it globally themselves.
+> The wizard does not suggest, recommend, or bundle any skills. It only surfaces what already exists on your machine or in the project.
 
 ### Plugins
 
@@ -135,13 +130,14 @@ After running the wizard, commit these paths:
 
 ```
 .claude/
-  settings.json     # plugins, hooks, env vars, permission rules, disabled MCP servers
-  .mcp.json         # MCP server configs (if applicable)
-  skills/           # copied skill folders
-CLAUDE.md           # project instructions (if Misc enhancements were applied)
+  settings.json       # plugins, hooks, env vars, permission rules, disabled MCP servers
+  settings.local.json # per-developer skill overrides (do not commit)
+  .mcp.json           # MCP server configs (if applicable)
+  skills/             # copied skill folders (commit these)
+CLAUDE.md             # project instructions (if Misc enhancements were applied)
 ```
 
-Teammates pull the repo and Claude Code picks up the configuration automatically. They can run `clkit` themselves to adjust their local selections (e.g. choose which of their own global skills to add), and commit the result.
+Teammates pull the repo and Claude Code picks up the configuration automatically. Each developer runs `clkit` themselves to adjust personal settings (e.g. disable skills they don't want, copy additional skills from their machine) — personal state lands in `settings.local.json` and stays off git.
 
 ---
 

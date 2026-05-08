@@ -165,6 +165,36 @@ export function setDisabledMcpServers(names) {
 }
 
 /**
+ * Returns the path to the project-level settings.local.json.
+ * @returns {string}
+ */
+export function getProjectLocalSettingsPath() {
+  return path.join(process.cwd(), '.claude', 'settings.local.json');
+}
+
+/**
+ * Reads skillOverrides from .claude/settings.local.json.
+ * Returns {} if file doesn't exist or key is absent.
+ * @returns {Record<string, boolean>}
+ */
+export function readSkillOverrides() {
+  const settings = readJson(getProjectLocalSettingsPath());
+  return settings.skillOverrides ?? {};
+}
+
+/**
+ * Merges skillOverrides into .claude/settings.local.json without clobbering other keys.
+ * Creates the file if it doesn't exist.
+ * @param {Record<string, boolean>} overrides
+ */
+export function writeSkillOverrides(overrides) {
+  const filePath = getProjectLocalSettingsPath();
+  const existing = readJson(filePath);
+  const updated = { ...existing, skillOverrides: overrides };
+  writeJson(filePath, updated);
+}
+
+/**
  * Syncs skill permissions in settings.json to deny all global skills except selected.
  * - Adds Skill(name) deny rules for all unselected global skills
  * - Preserves non-Skill() deny rules (e.g., "Read(./.env)")

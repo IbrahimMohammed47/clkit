@@ -94,9 +94,8 @@ export async function main() {
           value: "misc",
         },
         {
-          name: `${pc.green("✦")}  Skills        ${pc.dim("Copy global skills into this project")}`,
+          name: `${pc.green("✦")}  Skills        ${pc.dim("Enable/disable skills for this project")}`,
           value: "skills",
-          disabled: "(coming soon)",
         },
         {
           name: `${pc.dim("○")}  Agents        ${pc.dim("(coming soon)")}`,
