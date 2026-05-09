@@ -70,15 +70,15 @@ export function collectGlobalSkills() {
  * @param {string} [cwd]
  * @returns {{ name: string; sources: string[]; userSourcePath?: string }[]}
  */
-export function collectAllSkills(cwd = process.cwd()) {
+export function collectAllSkills(cwd = process.cwd(), userSkillsDir = USER_SKILLS_DIR) {
   const projectSkillsDir = path.join(cwd, '.claude', 'skills');
   const skillMap = new Map();
 
-  for (const name of listSkillFolders(USER_SKILLS_DIR)) {
+  for (const name of listSkillFolders(userSkillsDir)) {
     skillMap.set(name, {
       name,
       sources: ['user'],
-      userSourcePath: path.join(USER_SKILLS_DIR, name),
+      userSourcePath: path.join(userSkillsDir, name),
     });
   }
   for (const name of listSkillFolders(projectSkillsDir)) {
