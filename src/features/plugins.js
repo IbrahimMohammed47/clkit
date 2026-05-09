@@ -1,5 +1,6 @@
 import { checkbox } from '@inquirer/prompts';
 import pc from 'picocolors';
+import { renderWizardHeader } from '../utils/ui.js';
 import {
   getInstalledPlugins,
   enablePlugin,
@@ -7,17 +8,6 @@ import {
 } from '../utils/claude-cli.js';
 import { getProjectSettingsPath, getProjectPlugins } from '../utils/settings.js';
 
-/**
- * Renders the plugins wizard header.
- */
-function renderHeader() {
-  console.log('');
-  console.log(
-    pc.bgMagenta(pc.black(pc.bold('  ✦ clkit › Plugins Wizard  ')))
-  );
-  console.log(pc.dim('  Enable or disable Claude plugins for this project'));
-  console.log('');
-}
 
 /**
  * Renders a summary after applying plugin changes.
@@ -59,7 +49,7 @@ function renderSummary(enabled, disabled, errors) {
  * - On confirm: calls `claude plugins enable/disable` for changed plugins only
  */
 export async function pluginsWizard() {
-  renderHeader();
+  renderWizardHeader('Plugins Wizard', 'Enable or disable Claude plugins for this project', pc.bgMagenta);
 
   console.log(pc.dim('  Loading plugins via claude CLI…'));
   const plugins = getInstalledPlugins();

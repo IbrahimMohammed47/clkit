@@ -3,6 +3,7 @@ import { fileURLToPath } from 'url';
 import path from 'path';
 import fs from 'fs';
 import { getProjectSettingsPath } from './settings.js';
+import { readJson, writeJson } from './json.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -10,19 +11,6 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const HOOK_GROUPS = JSON.parse(
   fs.readFileSync(path.join(__dirname, '../data/hook-groups.json'), 'utf8')
 );
-
-function readJson(filePath) {
-  try {
-    return JSON.parse(fs.readFileSync(filePath, 'utf8'));
-  } catch {
-    return {};
-  }
-}
-
-function writeJson(filePath, data) {
-  fs.mkdirSync(path.dirname(filePath), { recursive: true });
-  fs.writeFileSync(filePath, JSON.stringify(data, null, 2) + '\n', 'utf8');
-}
 
 /** All command strings across every predefined group (used as identity keys). */
 function buildPredefinedCommandSet() {
@@ -52,8 +40,8 @@ export function getHookGroups() {
  * A group is "enabled" only when ALL of its hook entries are present verbatim.
  * @returns {string[]} enabled group names
  */
-export function getEnabledGroupNames() {
-  const settings = readJson(getProjectSettingsPath());
+export function getEnabledGroupNames(cwd = process.cwd()) {
+  const settings = readJson(getProjectSettingsPath(cwd));
   const currentHooks = settings.hooks ?? {};
   const enabled = [];
 
@@ -83,8 +71,8 @@ export function getEnabledGroupNames() {
  * Removes predefined hooks that are no longer selected.
  * @param {string[]} selectedGroupNames
  */
-export function applyHookGroups(selectedGroupNames) {
-  const settingsPath = getProjectSettingsPath();
+export function applyHookGroups(selectedGroupNames, cwd = process.cwd()) {
+  const settingsPath = getProjectSettingsPath(cwd);
   const settings = readJson(settingsPath);
   const predefinedCommands = buildPredefinedCommandSet();
 

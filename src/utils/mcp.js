@@ -1,41 +1,26 @@
 import path from 'path';
 import fs from 'fs';
 
-/**
- * Returns the path to the project-level .mcp.json file.
- * @returns {string}
- */
-export function getMcpFilePath() {
-  return path.join(process.cwd(), '.claude', '.mcp.json');
+export function getMcpFilePath(cwd = process.cwd()) {
+  return path.join(cwd, '.claude', '.mcp.json');
 }
 
-/**
- * Reads and parses the project .mcp.json file.
- * Returns { mcpServers: {} } if missing or invalid.
- * @returns {{ mcpServers: Record<string, object> }}
- */
-export function readMcpConfig() {
+export function readMcpConfig(cwd = process.cwd()) {
   try {
-    const raw = fs.readFileSync(getMcpFilePath(), 'utf8');
-    return JSON.parse(raw);
+    return JSON.parse(fs.readFileSync(getMcpFilePath(cwd), 'utf8'));
   } catch {
     return { mcpServers: {} };
   }
 }
 
-/**
- * Writes the MCP config back to .claude/.mcp.json, creating dirs as needed.
- * @param {{ mcpServers: Record<string, object> }} config
- */
-export function writeMcpConfig(config) {
-  const filePath = getMcpFilePath();
+export function writeMcpConfig(config, cwd = process.cwd()) {
+  const filePath = getMcpFilePath(cwd);
   fs.mkdirSync(path.dirname(filePath), { recursive: true });
   fs.writeFileSync(filePath, JSON.stringify(config, null, 2) + '\n', 'utf8');
 }
 
 /**
  * Extracts all ${VAR_NAME} or ${VAR:-default} patterns from an object (deep scan).
- * Returns a list of unique variable names referenced.
  * @param {any} obj
  * @returns {string[]}
  */

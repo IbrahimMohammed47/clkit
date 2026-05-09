@@ -1,5 +1,6 @@
 import { checkbox } from '@inquirer/prompts';
 import pc from 'picocolors';
+import { renderWizardHeader } from '../utils/ui.js';
 import {
   getHookGroups,
   getEnabledGroupNames,
@@ -8,14 +9,6 @@ import {
 } from '../utils/hooks.js';
 import { getProjectSettingsPath } from '../utils/settings.js';
 
-function renderHeader() {
-  console.log('');
-  console.log(
-    pc.bgYellow(pc.black(pc.bold('  ✦ clkit › Hook Groups Wizard  ')))
-  );
-  console.log(pc.dim('  Enable predefined hook groups in this project'));
-  console.log('');
-}
 
 function renderSummary(added, removed) {
   console.log('');
@@ -37,7 +30,7 @@ function renderSummary(added, removed) {
 }
 
 export async function hookGroupsWizard() {
-  renderHeader();
+  renderWizardHeader('Hook Groups Wizard', 'Enable predefined hook groups in this project', pc.bgYellow);
 
   const groups = getHookGroups();
   const enabledNames = new Set(getEnabledGroupNames());

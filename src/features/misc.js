@@ -3,16 +3,11 @@ import { execSync } from "child_process";
 import { existsSync, readFileSync, writeFileSync, appendFileSync } from "fs";
 import { join } from "path";
 import pc from "picocolors";
+import { renderWizardHeader } from "../utils/ui.js";
 
 const KARPATHY_START = "<!-- karpathy-guidelines -->";
 const KARPATHY_END = "<!-- /karpathy-guidelines -->";
 
-function renderHeader() {
-  console.log("");
-  console.log(pc.bgWhite(pc.black(pc.bold("  ✦ clkit › Misc Wizard  "))));
-  console.log(pc.dim("  Miscellaneous project enhancements"));
-  console.log("");
-}
 
 const MISC_OPTIONS = [
   {
@@ -51,7 +46,7 @@ const MISC_OPTIONS = [
 ];
 
 export async function miscWizard() {
-  renderHeader();
+  renderWizardHeader('Misc Wizard', 'Miscellaneous project enhancements', pc.bgWhite);
 
   const currentState = Object.fromEntries(MISC_OPTIONS.map((opt) => [opt.name, opt.isApplied()]));
 
