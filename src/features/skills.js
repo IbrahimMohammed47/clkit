@@ -1,7 +1,4 @@
 import pc from "picocolors";
-import os from "os";
-import path from "path";
-import fs from "fs";
 import {
   readSkillOverrides,
   writeSkillOverrides,
@@ -9,51 +6,7 @@ import {
 } from "../utils/settings.js";
 import { renderWizardHeader } from "../utils/ui.js";
 import { createTabbedPrompt } from "../utils/tabbed-prompt.js";
-
-function listSkillFolders(dirPath) {
-  try {
-    return fs
-      .readdirSync(dirPath, { withFileTypes: true })
-      .filter((e) => {
-        if (e.isDirectory()) return true;
-        if (e.isSymbolicLink()) {
-          try {
-            return fs.statSync(path.join(dirPath, e.name)).isDirectory();
-          } catch {
-            return false;
-          }
-        }
-        return false;
-      })
-      .map((e) => e.name);
-  } catch {
-    return [];
-  }
-}
-
-function collectAllSkills() {
-  const userSkillsDir = path.join(os.homedir(), ".claude", "skills");
-  const projectSkillsDir = path.join(process.cwd(), ".claude", "skills");
-
-  const skillMap = new Map();
-
-  for (const name of listSkillFolders(userSkillsDir)) {
-    skillMap.set(name, {
-      name,
-      sources: ["user"],
-      userSourcePath: path.join(userSkillsDir, name),
-    });
-  }
-  for (const name of listSkillFolders(projectSkillsDir)) {
-    if (skillMap.has(name)) {
-      skillMap.get(name).sources.push("project");
-    } else {
-      skillMap.set(name, { name, sources: ["project"] });
-    }
-  }
-
-  return [...skillMap.values()].sort((a, b) => a.name.localeCompare(b.name));
-}
+import { collectAllSkills, copySkillToProject, getLocalSkillsDir } from "../utils/fs.js";
 
 const tabbedSkillsPrompt = createTabbedPrompt({
   accentBg: pc.bgCyan,
@@ -62,7 +15,6 @@ const tabbedSkillsPrompt = createTabbedPrompt({
     "Copy skills from ~/.claude/skills/ into .claude/skills/ to share with teammates via git.",
   ],
 });
-
 
 export async function skillsWizard() {
   renderWizardHeader('Skills', null, pc.bgCyan);
@@ -152,16 +104,9 @@ export async function skillsWizard() {
 
   // ── Apply copy changes ────────────────────────────────────────────────────
   if (selectedCopy.length > 0) {
-    const projectSkillsDir = path.join(process.cwd(), ".claude", "skills");
-    fs.mkdirSync(projectSkillsDir, { recursive: true });
-
     for (const name of selectedCopy) {
       const skill = copyable.find((s) => s.name === name);
-      const realSrc = fs.realpathSync(skill.userSourcePath);
-      fs.cpSync(realSrc, path.join(projectSkillsDir, name), {
-        recursive: true,
-        dereference: true,
-      });
+      copySkillToProject(skill);
     }
 
     console.log(
@@ -171,9 +116,7 @@ export async function skillsWizard() {
     );
     selectedCopy.forEach((s) => console.log(pc.green(`    + ${s}`)));
     console.log(
-      pc.dim(
-        `  Location: ${pc.underline(path.join(process.cwd(), ".claude", "skills"))}`,
-      ),
+      pc.dim(`  Location: ${pc.underline(getLocalSkillsDir())}`),
     );
     console.log("");
   }
