@@ -16,6 +16,7 @@ import {
   writeSkillOverrides,
   getProjectLocalSettingsPath,
 } from "../utils/settings.js";
+import { renderWizardHeader } from "../utils/ui.js";
 
 function listSkillFolders(dirPath) {
   try {
@@ -151,14 +152,9 @@ const tabbedSkillsPrompt = createPrompt((config, done) => {
   return `\n  ${tabBar}\n${description}\n\n${items}\n\n${hint}\n`;
 });
 
-function renderHeader() {
-  console.log("");
-  console.log(pc.bgCyan(pc.black(pc.bold("  ✦ clkit › Skills  "))));
-  console.log("");
-}
 
 export async function skillsWizard() {
-  renderHeader();
+  renderWizardHeader('Skills', null, pc.bgCyan);
 
   const skills = collectAllSkills();
   const overrides = readSkillOverrides();

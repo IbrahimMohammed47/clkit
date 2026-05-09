@@ -9,6 +9,7 @@ import {
   isDownKey,
 } from '@inquirer/core';
 import pc from 'picocolors';
+import { renderWizardHeader } from '../utils/ui.js';
 import { listMcpServers } from '../utils/claude-cli.js';
 import { getDisabledMcpServers, setDisabledMcpServers } from '../utils/settings.js';
 import { readMcpConfig, writeMcpConfig } from '../utils/mcp.js';
@@ -16,12 +17,6 @@ import { readMcpConfig, writeMcpConfig } from '../utils/mcp.js';
 const require = createRequire(import.meta.url);
 const PREDEFINED = require('../data/mcps.json');
 
-function renderHeader() {
-  console.log('');
-  console.log(pc.bgBlue(pc.black(pc.bold('  ✦ clkit › MCP Wizard  '))));
-  console.log(pc.dim('  Manage MCP servers for this project'));
-  console.log('');
-}
 
 const tabbedMcpPrompt = createPrompt((config, done) => {
   const { tabs } = config; // [{ label, choices: [{name, value, checked}] }]
@@ -104,7 +99,7 @@ const tabbedMcpPrompt = createPrompt((config, done) => {
 });
 
 export async function mcpWizard() {
-  renderHeader();
+  renderWizardHeader('MCP Wizard', 'Manage MCP servers for this project', pc.bgBlue);
 
   console.log(pc.dim('  Loading MCP servers via claude CLI…'));
   const allInstalled = listMcpServers();
