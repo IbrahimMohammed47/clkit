@@ -23,6 +23,8 @@
   ],
   "author": "Ibrahim Mohammed",
   "license": "MIT",
+  "engines": { "node": ">=18" },
+  "files": ["bin/", "src/"],
   "dependencies": {
     "@inquirer/prompts": "^8.4.2",
     "figlet": "^1.11.0",
