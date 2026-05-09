@@ -8,10 +8,7 @@
   },
   "scripts": {
     "start": "node bin/clkit.js",
-    "dev": "node --watch bin/clkit.js",
-    "release": "npm version patch && git push --follow-tags",
-    "release:minor": "npm version minor && git push --follow-tags",
-    "release:major": "npm version major && git push --follow-tags"
+    "dev": "node --watch bin/clkit.js"
   },
   "keywords": [
     "claude",
@@ -23,14 +20,23 @@
   ],
   "author": "Ibrahim Mohammed",
   "license": "MIT",
-  "engines": { "node": ">=18" },
-  "files": ["bin/", "src/"],
+  "engines": {
+    "node": ">=18"
+  },
+  "files": [
+    "bin/",
+    "src/"
+  ],
   "dependencies": {
     "@inquirer/prompts": "^8.4.2",
     "figlet": "^1.11.0",
     "picocolors": "^1.1.1"
   },
   "devDependencies": {
+    "@semantic-release/changelog": "^6.0.3",
+    "@semantic-release/git": "^10.0.1",
+    "@semantic-release/github": "^12.0.8",
+    "semantic-release": "^25.0.3",
     "shadcn": "^4.5.0"
   }
 }
