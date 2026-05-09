@@ -1,6 +1,6 @@
 {
   "name": "@ibrahim-mohammed-47/clkit",
-  "version": "1.0.5",
+  "version": "1.1.0",
   "description": "A CLI wizard to help teams share the same claude code powers by scaffolding project scope configuration",
   "type": "module",
   "bin": {
