@@ -1,32 +1,9 @@
 import os from 'os';
 import path from 'path';
 import fs from 'fs';
+import { readJson, writeJson } from './json.js';
 
 const USER_SETTINGS_PATH = path.join(os.homedir(), '.claude', 'settings.json');
-
-/**
- * Reads and parses a JSON file. Returns {} if the file doesn't exist or is invalid.
- * @param {string} filePath
- * @returns {object}
- */
-function readJson(filePath) {
-  try {
-    const raw = fs.readFileSync(filePath, 'utf8');
-    return JSON.parse(raw);
-  } catch {
-    return {};
-  }
-}
-
-/**
- * Writes an object as formatted JSON to a file, creating parent dirs as needed.
- * @param {string} filePath
- * @param {object} data
- */
-function writeJson(filePath, data) {
-  fs.mkdirSync(path.dirname(filePath), { recursive: true });
-  fs.writeFileSync(filePath, JSON.stringify(data, null, 2) + '\n', 'utf8');
-}
 
 /**
  * Returns the path to the project-level settings.json.
