@@ -118,9 +118,9 @@ Current options:
 
 | Option                | What it does                                                                                                        |
 | --------------------- | ------------------------------------------------------------------------------------------------------------------- |
-| `karpathy-guidelines` | Appends [Andrej Karpathy's LLM coding guidelines](https://github.com/forrestchang/andrej-karpathy-skills) to `CLAUDE.md`. Creates the file if it doesn't exist. |
+| `karpathy-guidelines` | Appends [Andrej Karpathy's LLM coding guidelines](https://github.com/forrestchang/andrej-karpathy-skills) to `AGENTS.md`. Creates the file if it doesn't exist. |
 
-> Unlike the other wizards, Misc writes directly to `CLAUDE.md` in the project root rather than to `.claude/`. Commit `CLAUDE.md` to share the result with your team.
+> Unlike the other wizards, Misc writes directly to `AGENTS.md` in the project root rather than to `.claude/`. If `CLAUDE.md` exists, it becomes a bridge (`@AGENTS.md`) to keep agent tools unified. Commit `AGENTS.md` to share the result with your team.
 
 ---
 
@@ -134,7 +134,8 @@ After running the wizard, commit these paths:
   settings.local.json # per-developer skill overrides (do not commit)
   .mcp.json           # MCP server configs (if applicable)
   skills/             # copied skill folders (commit these)
-CLAUDE.md             # project instructions (if Misc enhancements were applied)
+AGENTS.md             # project instructions (if Misc enhancements were applied)
+CLAUDE.md             # bridge to AGENTS.md for Claude Code (@AGENTS.md)
 ```
 
 Teammates pull the repo and Claude Code picks up the configuration automatically. Each developer runs `clkit` themselves to adjust personal settings (e.g. disable skills they don't want, copy additional skills from their machine) — personal state lands in `settings.local.json` and stays off git.

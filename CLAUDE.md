@@ -49,7 +49,8 @@ src/data/                ← static data files (hook group definitions)
 
 **State written outside `.claude/` (Misc wizard):**
 
-- `CLAUDE.md` — one-shot enhancements appended at the end (e.g. Karpathy guidelines). The file is created if it does not exist.
+- `AGENTS.md` — one-shot enhancements appended at the end (e.g. Karpathy guidelines). The file is created if it does not exist. Single source of truth for all agents (Claude Code, Cursor, Windsurf, Gemini).
+- `CLAUDE.md` — bridge file that imports `AGENTS.md` via `@AGENTS.md` syntax. Created automatically to maintain Claude Code compatibility.
 
 ## Adding a new feature
 
