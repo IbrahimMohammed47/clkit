@@ -26,6 +26,16 @@
               "command": "bash -c 'out=$(npx tsc --noEmit 2>&1); code=$?; [ $code -ne 0 ] && { echo \"$out\" >&2; exit 2; }; exit 0'"
             }
           ]
+        },
+        {
+          "matcher": "MultiEdit",
+          "hooks": [
+            {
+              "type": "command",
+              "if": "MultiEdit(*.ts*)",
+              "command": "bash -c 'out=$(npx tsc --noEmit 2>&1); code=$?; [ $code -ne 0 ] && { echo \"$out\" >&2; exit 2; }; exit 0'"
+            }
+          ]
         }
       ]
     }
@@ -49,6 +59,15 @@
         },
         {
           "matcher": "Write",
+          "hooks": [
+            {
+              "type": "command",
+              "command": "bash -c 'out=$(npm run lint 2>&1); code=$?; [ $code -ne 0 ] && { echo \"$out\" >&2; exit 2; }; exit 0'"
+            }
+          ]
+        },
+        {
+          "matcher": "MultiEdit",
           "hooks": [
             {
               "type": "command",
@@ -86,6 +105,16 @@
               "command": "bash -c 'file=\"$CLAUDE_TOOL_RESULT_FILE_PATH\"; out=$(npx eslint --fix \"$file\" 2>&1); code=$?; [ $code -ne 0 ] && { echo \"$out\" >&2; exit 2; }; exit 0'"
             }
           ]
+        },
+        {
+          "matcher": "MultiEdit",
+          "hooks": [
+            {
+              "type": "command",
+              "if": "MultiEdit(*.[jt]s*)",
+              "command": "bash -c 'file=\"$CLAUDE_TOOL_RESULT_FILE_PATH\"; out=$(npx eslint --fix \"$file\" 2>&1); code=$?; [ $code -ne 0 ] && { echo \"$out\" >&2; exit 2; }; exit 0'"
+            }
+          ]
         }
       ]
     }
@@ -114,6 +143,16 @@
             {
               "type": "command",
               "if": "Write(*.[jt]s*|*.css|*.json|*.md)",
+              "command": "bash -c 'file=\"$CLAUDE_TOOL_RESULT_FILE_PATH\"; out=$(npx prettier --write \"$file\" 2>&1); code=$?; [ $code -ne 0 ] && { echo \"$out\" >&2; exit 2; }; exit 0'"
+            }
+          ]
+        },
+        {
+          "matcher": "MultiEdit",
+          "hooks": [
+            {
+              "type": "command",
+              "if": "MultiEdit(*.[jt]s*|*.css|*.json|*.md)",
               "command": "bash -c 'file=\"$CLAUDE_TOOL_RESULT_FILE_PATH\"; out=$(npx prettier --write \"$file\" 2>&1); code=$?; [ $code -ne 0 ] && { echo \"$out\" >&2; exit 2; }; exit 0'"
             }
           ]
