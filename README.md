@@ -44,7 +44,7 @@ Run from the root of the project you want to configure:
 clkit
 ```
 
-On first run it initializes the `.claude/` directory structure, adds a permission deny rule to prevent Claude from reading `.env` files, and asks whether the project is a coding assistant project or an agentic workspace (which controls whether Claude AI MCP servers are enabled).
+On first run it initializes the `.claude/` directory structure and adds permission deny rules to prevent Claude from reading `.env` files.
 
 After setup, the main menu loops until you exit, letting you configure each feature independently.
 

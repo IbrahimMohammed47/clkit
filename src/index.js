@@ -39,30 +39,7 @@ async function runSetup() {
   console.log(pc.bold(pc.cyan("  ◆  First-time project setup")));
   console.log("");
 
-  let projectType;
-  try {
-    projectType = await select({
-      message: "How will Claude be used in this project?",
-      choices: [
-        {
-          name: `${pc.cyan("{ }")}  Coding project        ${pc.dim("Claude as a coding assistant")}`,
-          value: "coding",
-        },
-        {
-          name: `${pc.magenta("◈")}  Agentic workspace     ${pc.dim("Claude for autonomous / multi-step work")}`,
-          value: "agentic",
-        },
-      ],
-    });
-  } catch (err) {
-    if (err.name === "ExitPromptError") return;
-    throw err;
-  }
-
-  ensureProjectEnvVar(
-    "ENABLE_CLAUDEAI_MCP_SERVERS",
-    projectType === "agentic" ? "true" : "false",
-  );
+  ensureProjectEnvVar("ENABLE_CLAUDEAI_MCP_SERVERS", "false");
 
   console.log("");
   console.log(pc.dim("  ─────────────────────────────────────"));
