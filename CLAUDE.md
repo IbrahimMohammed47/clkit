@@ -24,7 +24,7 @@ src/utils/               ← stateless helpers; no cross-dependencies between ut
 src/data/                ← static data files (hook group definitions)
 ```
 
-**First-time setup (`runSetup` in `src/index.js`):** Runs once per project. Initializes `.claude/` structure, adds deny rules for `.env`, and prompts for project type (coding vs agentic). Sets `ENABLE_CLAUDEAI_MCP_SERVERS` env var in `settings.json`; skips on subsequent runs if key already present.
+**First-time setup (`runSetup` in `src/index.js`):** Runs once per project. Initializes `.claude/` structure, adds deny rules for `.env`, and sets `ENABLE_CLAUDEAI_MCP_SERVERS=false` in `settings.json`. Skips on subsequent runs if key already present.
 
 **Feature flow pattern:** each `src/features/*.js` exports a single `<name>Wizard()` async function. The wizard renders a header, calls util functions to read current state, prompts the user via `@inquirer/prompts` (or `@inquirer/core` for custom prompts), diffs old vs. new selection, and applies changes. All prompts catch `ExitPromptError` (Ctrl-C) and return gracefully. The `misc` wizard is an exception: it presents one-shot enhancements via `checkbox` (no prior state to diff) and applies each selected option immediately.
 
