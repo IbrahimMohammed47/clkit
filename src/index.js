@@ -12,6 +12,7 @@ import {
   ensureProjectEnvVar,
   ensurePermissionDenyRule,
 } from "./utils/settings.js";
+import { ensureAgentsBridge } from "./utils/fs.js";
 
 const VERSION = "1.0.0";
 
@@ -30,6 +31,7 @@ function renderBanner() {
 
 async function runSetup() {
   initProjectStructure();
+  ensureAgentsBridge();
   ensurePermissionDenyRule("Read(./.env)");
   ensurePermissionDenyRule("Grep(./.env)");
 

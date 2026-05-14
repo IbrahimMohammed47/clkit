@@ -133,3 +133,42 @@ export function removeSkillFromProject(skillName, cwd = process.cwd()) {
   const destDir = path.join(getLocalSkillsDir(cwd), skillName);
   fs.rmSync(destDir, { recursive: true, force: true });
 }
+
+/**
+ * Ensures CLAUDE.md is a bridge to AGENTS.md (@AGENTS.md).
+ * Handles migration of existing CLAUDE.md content to AGENTS.md.
+ * Scenario matrix:
+ * - Neither exists: no-op
+ * - Only AGENTS.md exists: create CLAUDE.md = @AGENTS.md
+ * - Only CLAUDE.md exists (bridge): no-op
+ * - Only CLAUDE.md exists (content): move to AGENTS.md, replace with bridge
+ * - Both exist (CLAUDE.md has content): warn, touch nothing (user must manually merge)
+ * @param {string} [cwd]
+ */
+export function ensureAgentsBridge(cwd = process.cwd()) {
+  const BRIDGE = '@AGENTS.md';
+  const claudePath = path.join(cwd, 'CLAUDE.md');
+  const agentsPath = path.join(cwd, 'AGENTS.md');
+
+  const claudeExists = fs.existsSync(claudePath);
+  const agentsExists = fs.existsSync(agentsPath);
+
+  if (!claudeExists && !agentsExists) return;
+
+  if (!claudeExists) {
+    fs.writeFileSync(claudePath, `${BRIDGE}\n`, 'utf8');
+    return;
+  }
+
+  const claudeContent = fs.readFileSync(claudePath, 'utf8');
+  if (claudeContent.trim() === BRIDGE) return;
+
+  if (!agentsExists) {
+    fs.writeFileSync(agentsPath, claudeContent, 'utf8');
+    fs.writeFileSync(claudePath, `${BRIDGE}\n`, 'utf8');
+  } else {
+    console.warn(
+      '  ⚠ CLAUDE.md and AGENTS.md both have content. Manually merge CLAUDE.md into AGENTS.md, then replace CLAUDE.md with: @AGENTS.md'
+    );
+  }
+}

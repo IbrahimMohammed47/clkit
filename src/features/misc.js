@@ -4,6 +4,7 @@ import { existsSync, readFileSync, writeFileSync, appendFileSync } from "fs";
 import { join } from "path";
 import pc from "picocolors";
 import { renderWizardHeader } from "../utils/ui.js";
+import { ensureAgentsBridge } from "../utils/fs.js";
 
 const KARPATHY_START = "<!-- karpathy-guidelines -->";
 const KARPATHY_END = "<!-- /karpathy-guidelines -->";
@@ -13,33 +14,34 @@ const MISC_OPTIONS = [
   {
     name: "karpathy-guidelines",
     label: "Karpathy Guidelines",
-    description: "Append Andrej Karpathy's LLM coding guidelines to CLAUDE.md",
+    description: "Append Andrej Karpathy's LLM coding guidelines to AGENTS.md",
     isApplied() {
-      const claudeMd = join(process.cwd(), "CLAUDE.md");
-      if (!existsSync(claudeMd)) return false;
-      const content = readFileSync(claudeMd, "utf8");
+      const agentsMd = join(process.cwd(), "AGENTS.md");
+      if (!existsSync(agentsMd)) return false;
+      const content = readFileSync(agentsMd, "utf8");
       return content.includes(KARPATHY_START) || content.includes("## Behavioral Coding Guidelines");
     },
     apply() {
-      const claudeMd = join(process.cwd(), "CLAUDE.md");
-      if (!existsSync(claudeMd)) appendFileSync(claudeMd, "");
+      ensureAgentsBridge();
+      const agentsMd = join(process.cwd(), "AGENTS.md");
+      if (!existsSync(agentsMd)) appendFileSync(agentsMd, "");
       const raw = execSync(
         "curl -fsSL https://raw.githubusercontent.com/forrestchang/andrej-karpathy-skills/main/CLAUDE.md",
         { encoding: "utf8" }
       );
       const content = raw.replace(/^#\s+CLAUDE\.md\s*\n?/, "## Behavioral Coding Guidelines\n");
-      appendFileSync(claudeMd, `\n${KARPATHY_START}\n${content}\n${KARPATHY_END}\n`);
+      appendFileSync(agentsMd, `\n${KARPATHY_START}\n${content}\n${KARPATHY_END}\n`);
     },
     remove() {
-      const claudeMd = join(process.cwd(), "CLAUDE.md");
-      if (!existsSync(claudeMd)) return true;
-      const content = readFileSync(claudeMd, "utf8");
+      const agentsMd = join(process.cwd(), "AGENTS.md");
+      if (!existsSync(agentsMd)) return true;
+      const content = readFileSync(agentsMd, "utf8");
       if (!content.includes(KARPATHY_START)) return false; // legacy install, no sentinels
       const updated = content.replace(
         /\n?<!-- karpathy-guidelines -->[\s\S]*?<!-- \/karpathy-guidelines -->\n?/g,
         ""
       );
-      writeFileSync(claudeMd, updated, "utf8");
+      writeFileSync(agentsMd, updated, "utf8");
       return true;
     },
   },
@@ -93,7 +95,7 @@ export async function miscWizard() {
     try {
       const ok = opt.remove();
       if (!ok) {
-        console.log(pc.yellow(`  ⚠ ${opt.label} — legacy install (no sentinels), remove manually from CLAUDE.md`));
+        console.log(pc.yellow(`  ⚠ ${opt.label} — legacy install (no sentinels), remove manually from AGENTS.md or CLAUDE.md`));
       } else {
         console.log(pc.green(`  ✔ Removed: ${opt.label}`));
       }
