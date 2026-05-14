@@ -1,3 +1,10 @@
+# [1.3.0](https://github.com/IbrahimMohammed47/clkit/compare/v1.2.0...v1.3.0) (2026-05-14)
+
+
+### Features
+
+* add MultiEdit matchers to hook groups ([24987c5](https://github.com/IbrahimMohammed47/clkit/commit/24987c5de1e4ca814dc9b2ac94338696b126d06b))
+
 # [1.2.0](https://github.com/IbrahimMohammed47/clkit/compare/v1.1.0...v1.2.0) (2026-05-14)
 
 
