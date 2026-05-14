@@ -1,3 +1,10 @@
+# [1.4.0](https://github.com/IbrahimMohammed47/clkit/compare/v1.3.0...v1.4.0) (2026-05-14)
+
+
+### Features
+
+* migrate karpathy guidelines to AGENTS.md as canonical target ([318b5b2](https://github.com/IbrahimMohammed47/clkit/commit/318b5b227dc0379234f96d09643efdeb77c7263b))
+
 # [1.3.0](https://github.com/IbrahimMohammed47/clkit/compare/v1.2.0...v1.3.0) (2026-05-14)
 
 
